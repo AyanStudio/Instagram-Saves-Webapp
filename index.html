@@ -3,64 +3,66 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0b0d">
-<meta name="description" content="Private, local-only Instagram saves library">
+<meta name="theme-color" content="#111111">
+<meta name="description" content="Private local Instagram saves library">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icons/icon-192.png">
 <title>InstaSaves</title>
 <style>
-:root{color-scheme:dark;--bg:#0b0b0d;--panel:#141418;--panel2:#1b1b21;--line:#2a2a33;--text:#f5f5f7;--muted:#9b9ba6;--accent:#c7ff4a;--danger:#ff6878}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-header{position:sticky;top:0;z-index:10;background:rgba(11,11,13,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:14px 16px}
-.top{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:12px}.brand{font-weight:800;font-size:20px}.sub{font-size:12px;color:var(--muted);margin-top:2px}
-main{max-width:900px;margin:auto;padding:16px}.search{width:100%;padding:14px 16px;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:15px;outline:none;font-size:16px}.search:focus{border-color:#565663}
-.toolbar{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}.toolbar button{flex:1;min-width:120px}
-button{border:0;border-radius:12px;padding:11px 14px;font-weight:750;cursor:pointer}.primary{background:var(--accent);color:#0d0d0e}.ghost{background:var(--panel2);color:var(--text)}.danger{background:#32181d;color:#ffb3bd}
-.add{background:var(--panel);border:1px solid var(--line);padding:13px;border-radius:16px;margin-bottom:14px}.row{display:flex;gap:9px}.row input{flex:1;min-width:0}.input{border:1px solid var(--line);background:#101014;color:var(--text);border-radius:12px;padding:12px;font-size:14px;outline:none}.hint{font-size:12px;color:var(--muted);line-height:1.45;margin-top:9px}
-.grid{display:grid;gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;overflow:hidden}.thumb{width:100%;aspect-ratio:16/10;object-fit:cover;background:#101014;display:block}.placeholder{display:grid;place-items:center;color:#555562;font-size:13px}.body{padding:14px}.title{font-weight:750;font-size:16px;line-height:1.3}.url{font-size:12px;color:var(--muted);margin-top:6px;word-break:break-all;line-height:1.35}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.tag{font-size:11px;border:1px solid var(--line);border-radius:999px;padding:4px 8px;color:#d4d4dc}.notes{margin-top:10px;color:#c4c4cc;font-size:13px;line-height:1.45}.actions{display:flex;gap:8px;margin-top:12px}.actions>*{flex:1;text-align:center}.actions a{display:block;text-decoration:none;padding:11px 14px;border-radius:12px}.empty{color:var(--muted);text-align:center;padding:52px 16px;line-height:1.5}
-dialog{width:min(92vw,520px);border:1px solid var(--line);border-radius:18px;background:var(--panel);color:var(--text);padding:0}dialog::backdrop{background:rgba(0,0,0,.7)}.modal{padding:18px}.modal h2{margin:0 0 14px}.modal-actions{display:flex;gap:8px;margin-top:12px}.modal-actions button{flex:1}.notice{font-size:12px;color:var(--muted);padding:10px 0}
-@media(min-width:760px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+:root{color-scheme:dark;--bg:#0c0c0f;--panel:#15151a;--line:#282830;--text:#f5f5f7;--muted:#9b9ba5;--accent:#c7ff4a}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}header{position:sticky;top:0;z-index:10;background:#0c0c0ff2;backdrop-filter:blur(13px);border-bottom:1px solid var(--line);padding:15px 16px}.head{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}h1{font-size:22px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:2px}main{max-width:900px;margin:auto;padding:16px}.search,.input,.modal input,.modal textarea{width:100%;border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:13px;padding:13px;font-size:15px;outline:none}.row{display:flex;gap:8px;margin:13px 0}.row .input{flex:1;min-width:0}.hint{font-size:12px;color:var(--muted);line-height:1.5;margin:7px 0 14px}button,a.btn{border:0;border-radius:11px;padding:10px 13px;font-weight:750;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center;align-items:center}.primary{background:var(--accent);color:#111}.ghost{background:#232329;color:var(--text)}.danger{background:#3a1d22;color:#ffb8c0}.tools{display:flex;gap:8px;margin-bottom:15px}.grid{display:grid;gap:13px}.card{overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:17px}.thumb{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:#101014}.body{padding:13px}.title{font-size:16px;font-weight:750}.author{font-size:12px;color:#b5b5bf;margin-top:3px}.url{font-size:12px;color:var(--muted);word-break:break-all;line-height:1.4;margin-top:5px}.caption{font-size:13px;line-height:1.5;color:#d3d3d8;margin-top:9px;white-space:pre-wrap}.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}.tag{font-size:11px;color:#d7d7dd;border:1px solid var(--line);border-radius:999px;padding:4px 8px}.actions{display:flex;gap:7px;margin-top:12px}.actions>*{flex:1}.empty{text-align:center;color:var(--muted);padding:50px 15px}dialog{width:min(94vw,560px);border:1px solid var(--line);border-radius:17px;background:var(--panel);color:var(--text);padding:0}dialog::backdrop{background:#000b}.modal{padding:18px}.modal h2{margin:0 0 10px}.modal textarea{min-height:130px;resize:vertical;margin-top:8px}.modal-actions{display:flex;gap:8px;margin-top:10px}.modal-actions>*{flex:1}@media(min-width:720px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
-<header><div class="top"><div><div class="brand">InstaSaves</div><div class="sub" id="status">Local-only library</div></div><button class="ghost" id="exportBtn">Export</button></div></header>
+<header><div class="head"><div><h1>InstaSaves</h1><div class="sub" id="status">Local-only library</div></div><button id="exportBtn" class="ghost">Export</button></div></header>
 <main>
-  <input id="search" class="search" placeholder="Search your saves…" autocomplete="off">
-  <section class="add">
-    <div class="row"><input id="urlInput" class="input" type="url" inputmode="url" placeholder="Paste an Instagram link"><button id="saveBtn" class="primary">Save</button></div>
-    <div class="hint">Everything you save is stored in this device's IndexedDB. The app does not have a database/server.</div>
-  </section>
-  <div class="toolbar"><button id="importBtn" class="ghost">Import</button><button id="clearBtn" class="danger">Clear all</button></div>
-  <input id="importFile" type="file" accept="application/json,.json" hidden>
-  <section id="grid" class="grid"></section>
+<input id="search" class="search" placeholder="Search your saves…" autocomplete="off">
+<div class="row"><input id="urlInput" class="input" inputmode="url" placeholder="Paste Instagram link"><button id="saveBtn" class="primary">Save</button></div>
+<div class="hint">Share from Instagram directly to InstaSaves. The link is saved automatically. The app then tries to obtain a public post thumbnail/metadata; the saved record stays in this device's IndexedDB.</div>
+<div class="tools"><button id="importBtn" class="ghost">Import</button><input id="fileInput" type="file" accept="application/json,.json" hidden></div>
+<section id="grid" class="grid"></section>
 </main>
-<dialog id="editDialog"><form id="editForm" method="dialog" class="modal"><h2>Edit save</h2><input id="editTitle" class="search" placeholder="Title"><div style="height:10px"></div><input id="editTags" class="search" placeholder="Tags, comma separated"><div style="height:10px"></div><textarea id="editNotes" class="search" style="min-height:120px;resize:vertical" placeholder="Notes"></textarea><div class="modal-actions"><button type="button" class="ghost" id="cancelEdit">Cancel</button><button type="submit" class="primary">Save changes</button></div></form></dialog>
+<dialog id="dlg"><form id="form" class="modal" method="dialog"><h2>Edit save</h2><input id="fTitle" placeholder="Title"><input id="fAuthor" placeholder="Author / username" style="margin-top:8px"><textarea id="fCaption" placeholder="Caption / shared text"></textarea><input id="fTags" placeholder="Tags, comma separated" style="margin-top:8px"><div class="modal-actions"><button class="ghost" value="cancel">Cancel</button><button id="fSave" class="primary" value="default">Save</button></div></form></dialog>
 <script>
-const DB='instasaves-v3', STORE='saves'; let db=null, editId=null;
-const $=id=>document.getElementById(id);
+const DB='instasaves-v6',STORE='saves';let db=null,editId=null;const $=id=>document.getElementById(id);
 function openDB(){return new Promise((res,rej)=>{const r=indexedDB.open(DB,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE,{keyPath:'id',autoIncrement:true});r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function store(mode='readonly'){return db.transaction(STORE,mode).objectStore(STORE)}
-function getAll(){return new Promise((res,rej)=>{const r=store().getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function put(v){return new Promise((res,rej)=>{const r=store('readwrite').put(v);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function add(v){return new Promise((res,rej)=>{const r=store('readwrite').add(v);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
-function del(id){return new Promise((res,rej)=>{const r=store('readwrite').delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
-function clearAll(){return new Promise((res,rej)=>{const r=store('readwrite').clear();r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
-function validUrl(s){try{const u=new URL(s.trim()); if(!/^www\.instagram\.com$|^instagram\.com$|^[a-z]+\.instagram\.com$/i.test(u.hostname))return null; u.hash=''; return u.toString()}catch{return null}}
-function tagsFromUrl(url){const p=url.toLowerCase(),a=[];if(p.includes('/reel/'))a.push('reel');else if(p.includes('/p/'))a.push('post');else if(p.includes('/tv/'))a.push('video');return a}
-function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function placeholder(){return '<div class="thumb placeholder">Instagram save</div>'}
-async function render(){let items=await getAll();items.sort((a,b)=>b.createdAt-a.createdAt);const q=$('search').value.trim().toLowerCase();if(q)items=items.filter(x=>[x.url,x.title,x.caption,x.notes,...(x.tags||[])].join(' ').toLowerCase().includes(q));if(!items.length){$('grid').innerHTML='<div class="empty">'+(q?'No saves match your search.':'No saves yet. Share an Instagram post to InstaSaves or paste a link above.')+'</div>';return}$('grid').innerHTML=items.map(x=>`<article class="card">${x.thumbnail?`<img class="thumb" src="${esc(x.thumbnail)}" alt="" loading="lazy">`:placeholder()}<div class="body"><div class="title">${esc(x.title||'Instagram save')}</div><div class="url">${esc(x.url)}</div>${x.caption?`<div class="notes">${esc(x.caption)}</div>`:''}<div class="tags">${(x.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>${x.notes?`<div class="notes">${esc(x.notes)}</div>`:''}<div class="actions"><a class="ghost" href="${esc(x.url)}" target="_blank" rel="noopener">Open</a><button class="ghost" onclick="window.editSave(${x.id})">Edit</button><button class="danger" onclick="window.deleteSave(${x.id})">Delete</button></div></div></article>`).join('')}
-window.deleteSave=async id=>{if(!confirm('Delete this save?'))return;await del(id);await render()};
-window.editSave=async id=>{const x=(await getAll()).find(v=>v.id===id);if(!x)return;editId=id;$('editTitle').value=x.title||'';$('editTags').value=(x.tags||[]).join(', ');$('editNotes').value=x.notes||'';$('editDialog').showModal()};
-async function saveUrl(raw){const url=validUrl(raw);if(!url)return false;const items=await getAll();if(items.some(x=>x.url===url))return true;await add({url,title:'Instagram save',caption:'',thumbnail:'',tags:tagsFromUrl(url),notes:'',createdAt:Date.now()});return true}
-$('saveBtn').onclick=async()=>{if(!(await saveUrl($('urlInput').value)))return alert('Paste a valid Instagram URL.');$('urlInput').value='';await render()};$('search').oninput=render;$('cancelEdit').onclick=()=>$('editDialog').close();
-$('editForm').onsubmit=async e=>{e.preventDefault();const x=(await getAll()).find(v=>v.id===editId);if(!x)return;x.title=$('editTitle').value.trim()||'Instagram save';x.tags=$('editTags').value.split(',').map(s=>s.trim()).filter(Boolean);x.notes=$('editNotes').value.trim();await put(x);$('editDialog').close();await render()};
-$('exportBtn').onclick=async()=>{const blob=new Blob([JSON.stringify({format:'instasaves-v3',exportedAt:new Date().toISOString(),saves:await getAll()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='instasaves-backup.json';a.click();URL.revokeObjectURL(a.href)};
-$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const d=JSON.parse(await f.text());for(const x of (d.saves||[])){if(validUrl(x.url))await saveUrl(x.url).then(async()=>{const items=await getAll();const y=items.find(v=>v.url===validUrl(x.url));if(y){y.title=x.title||y.title;y.caption=x.caption||'';y.thumbnail=x.thumbnail||'';y.tags=x.tags||[];y.notes=x.notes||'';await put(y)}})}await render();alert('Import complete.')}catch{alert('That backup is invalid.')}};
-$('clearBtn').onclick=async()=>{if(confirm('Delete every local save from this device?')){await clearAll();await render()}};
-async function handleShareUrl(){const qs=new URLSearchParams(location.search);const shared=qs.get('url')||qs.get('shared_url')||qs.get('text');if(shared){const u=validUrl(shared)||((shared.match(/https?:\/\/[^\s]+/i)||[])[0]&&validUrl((shared.match(/https?:\/\/[^\s]+/i)||[])[0]));if(u){await saveUrl(u);$('status').textContent='Saved from Android share';await render()}history.replaceState({},'',location.pathname)}}
-async function init(){db=await openDB();if('serviceWorker'in navigator){try{await navigator.serviceWorker.register('./sw.js',{scope:'./'})}catch{}}$('status').textContent=navigator.onLine?'Local-only library':'Local-only · offline';await handleShareUrl();await render()}
-init();
-</script>
-</body>
-</html>
+function all(){return new Promise((res,rej)=>{const r=db.transaction(STORE).objectStore(STORE).getAll();r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function add(v){return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).add(v);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function put(v){return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).put(v);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)})}
+function del(id){return new Promise((res,rej)=>{const r=db.transaction(STORE,'readwrite').objectStore(STORE).delete(id);r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
+function norm(v){try{const u=new URL((v||'').trim());const h=u.hostname.replace(/^www\./,'').toLowerCase();if(h!=='instagram.com'&&!h.endsWith('.instagram.com'))return null;u.hash='';return u.toString()}catch{return null}}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function autoTags(url,text){const s=(url+' '+text).toLowerCase(),t=[];if(s.includes('/reel/'))t.push('reel');if(s.includes('/p/'))t.push('post');if(/ai|python|coding|developer|programming|software|tech|tool/.test(s))t.push('tech');if(/nature|travel|mountain|forest|wildlife/.test(s))t.push('nature');return [...new Set(t)]}
+async function tryOembed(url){
+  // Public Instagram oEmbed endpoint. Browser/CORS availability is not guaranteed.
+  try{
+    const endpoint='https://graph.facebook.com/v25.0/instagram_oembed?url='+encodeURIComponent(url);
+    const r=await fetch(endpoint,{credentials:'omit'});
+    if(!r.ok)throw Error('HTTP '+r.status);
+    const d=await r.json();
+    return {title:d.title||'',author:d.author_name||'',thumbnailUrl:d.thumbnail_url||''};
+  }catch{return null}
+}
+async function tryCacheImage(url){
+  if(!url)return '';
+  try{const r=await fetch(url,{credentials:'omit'});if(!r.ok)throw Error();const b=await r.blob();if(!b.type.startsWith('image/'))return '';return await new Promise(resolve=>{const rd=new FileReader();rd.onload=()=>resolve(rd.result);rd.onerror=()=>resolve('');rd.readAsDataURL(b)})}catch{return ''}
+}
+async function saveItem(raw,title='',text=''){
+  const url=norm(raw);if(!url)return false;
+  const items=await all();if(items.some(x=>x.url===url))return true;
+  // Create the local record first so Share->Save never gets lost while metadata is being fetched.
+  const item={url,title:(title||'').trim()||'Instagram save',author:'',caption:(text||'').trim(),thumbnail:'',thumbnailUrl:'',tags:autoTags(url,text),createdAt:Date.now(),metadataStatus:'loading'};
+  const id=await add(item);item.id=id;render();
+  const meta=await tryOembed(url);
+  if(meta){item.title=(item.title==='Instagram save'&&meta.title)?meta.title:item.title;item.author=meta.author||'';item.thumbnailUrl=meta.thumbnailUrl||'';const local=await tryCacheImage(meta.thumbnailUrl);item.thumbnail=local||meta.thumbnailUrl||'';item.metadataStatus=local?'local-thumbnail':(meta.thumbnailUrl?'remote-thumbnail':'metadata-no-thumbnail');await put(item);render()}
+  else{item.metadataStatus='url-and-share-text-only';await put(item);render()}
+  return true;
+}
+async function render(){let items=await all();items.sort((a,b)=>b.createdAt-a.createdAt);const q=$('search').value.trim().toLowerCase();const f=items.filter(x=>!q||[x.url,x.title,x.author,x.caption,...(x.tags||[])].join(' ').toLowerCase().includes(q));$('grid').innerHTML=f.length?f.map(x=>`<article class="card">${x.thumbnail?`<img class="thumb" src="${esc(x.thumbnail)}" alt="" loading="lazy">`:`<div class="thumb"></div>`}<div class="body"><div class="title">${esc(x.title||'Instagram save')}</div>${x.author?`<div class="author">@${esc(x.author)}</div>`:''}<div class="url">${esc(x.url)}</div>${x.caption?`<div class="caption">${esc(x.caption)}</div>`:''}<div class="tags">${(x.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div><div class="actions"><a class="btn ghost" href="${esc(x.url)}" target="_blank" rel="noopener">Open</a><button class="ghost" onclick="editSave(${x.id})">Edit</button><button class="danger" onclick="removeSave(${x.id})">Delete</button></div></div></article>`).join(''):`<div class="empty">${items.length?'No matching saves.':'No saves yet. Share an Instagram post/reel here.'}</div>`}
+window.editSave=async id=>{const x=(await all()).find(v=>v.id===id);if(!x)return;editId=id;$('fTitle').value=x.title||'';$('fAuthor').value=x.author||'';$('fCaption').value=x.caption||'';$('fTags').value=(x.tags||[]).join(', ');$('dlg').showModal()};window.removeSave=async id=>{if(confirm('Delete this save?')){await del(id);render()}};
+$('saveBtn').onclick=async()=>{const u=norm($('urlInput').value);if(!u)return alert('Please enter a valid Instagram URL.');await saveItem(u);$('urlInput').value='';render()};$('search').oninput=render;
+$('form').addEventListener('submit',async e=>{if(e.submitter?.id!=='fSave')return;e.preventDefault();const x=(await all()).find(v=>v.id===editId);if(!x)return;x.title=$('fTitle').value.trim()||'Instagram save';x.author=$('fAuthor').value.trim();x.caption=$('fCaption').value.trim();x.tags=$('fTags').value.split(',').map(s=>s.trim()).filter(Boolean);await put(x);$('dlg').close();render()});
+$('exportBtn').onclick=async()=>{const data=await all();const blob=new Blob([JSON.stringify({app:'InstaSaves',version:6,exportedAt:new Date().toISOString(),saves:data},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='instasaves-backup.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+$('importBtn').onclick=()=>$('fileInput').click();$('fileInput').onchange=async()=>{const f=$('fileInput').files?.[0];if(!f)return;try{const data=JSON.parse(await f.text()),saves=Array.isArray(data)?data:data.saves;if(!Array.isArray(saves))throw Error();const existing=await all(),seen=new Set(existing.map(x=>x.url));let n=0;for(const x of saves){const u=norm(x.url);if(u&&!seen.has(u)){await add({url:u,title:x.title||'Instagram save',author:x.author||'',caption:x.caption||'',thumbnail:x.thumbnail||'',thumbnailUrl:x.thumbnailUrl||'',tags:Array.isArray(x.tags)?x.tags:[],createdAt:x.createdAt||Date.now(),metadataStatus:x.metadataStatus||'imported'});seen.add(u);n++}}alert(`Imported ${n} new save(s).`);render()}catch{alert('Invalid InstaSaves backup.')}finally{$('fileInput').value=''}};
+async function receiveShare(){const p=new URL(location.href).searchParams;const url=p.get('url')||'';const text=p.get('text')||'';const title=p.get('title')||'';if(url&&norm(url)){history.replaceState({},'',location.pathname);await saveItem(url,title,text);$('status').textContent='Saved from Instagram';}}
+async function init(){db=await openDB();try{await navigator.serviceWorker?.register('./sw.js')}catch{}$('status').textContent=navigator.onLine?'Local-only · device storage':'Local-only · offline';await receiveShare();render()}init();
+</script></body></html>

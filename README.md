@@ -1,23 +1,14 @@
-# InstaSaves v3 — local-only Android PWA
+# InstaSaves v6
 
-This version is designed around the actual requirement: GitHub Pages (or another static host) only distributes the app files. Personal saves are stored in IndexedDB on the device using the browser/PWA origin. There is no backend, account, cloud database, or sync service.
+This is the v3-style version with automatic Android share saving preserved, plus a best-effort public Instagram metadata/thumbnail step.
 
-## What changed
-- Proper PNG 192x192 and 512x512 app icons.
-- `display: standalone` and explicit app `id`.
-- Android Web Share Target uses a POST request to `/share-target/`.
-- The service worker intercepts that POST and redirects the shared URL into the app, including an offline-friendly path.
-- IndexedDB remains the local source of truth.
-- Search, edit, delete, export, import.
+- Share Instagram link -> InstaSaves automatically saves the URL immediately.
+- Then the app attempts a public Instagram oEmbed request for title/author/thumbnail information.
+- It also attempts to download the thumbnail into a local data URL so the card can remain visible offline. If the thumbnail request is blocked by browser CORS, it falls back to the remote thumbnail URL.
+- IndexedDB is the source of truth on the device.
+- No account, backend, Supabase, Firebase, sync, or video download.
+- JSON Import/Export included.
 
-## Important limitation
-This v3 does not yet retrieve Instagram's thumbnail/caption from the URL. It stores the URL locally and leaves metadata fields ready for the next step. Retrieving Instagram metadata is an internet operation and may be subject to browser CORS and Instagram/Meta API/terms constraints. It should be added only after testing the exact public-post metadata route.
+The browser may block the metadata or image request because cross-origin access and Instagram/Meta policies can change. The automatic save itself does not depend on metadata succeeding.
 
-## Installation/testing
-1. Serve this folder over HTTPS. GitHub Pages is suitable because it only serves the static app files.
-2. Open the URL in Chrome on Android.
-3. Install the PWA as an app. A PWA must be installed before it can be registered as an OS share target.
-4. From Instagram, choose Share and look for InstaSaves.
-5. Shared links should be saved into this phone's IndexedDB.
-
-If the app only appears as a normal shortcut and does not show an installable-app flow, open Chrome DevTools' Manifest/Installability diagnostics on a desktop against the same deployment to see what the browser is rejecting.
+MDN documents GET share targets for receiving title/text/URL, and notes that installed PWAs are required to appear in the system share dialog. citeturn155523search0turn155523search2
