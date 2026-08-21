@@ -1,18 +1,9 @@
-# InstaSaves — Offline Android PWA MVP v2
+# InstaSaves v5
 
-This build is local-only.
+Local-only PWA with IndexedDB, Android Share Target, offline shell, and JSON import/export.
 
-- IndexedDB stores saves on the device.
-- Service worker caches the app shell for offline use.
-- Android share_target is included in the manifest.
-- Proper 192x192 and 512x512 PNG icons are included.
-- No login, backend, cloud sync, or Instagram API is used.
+For public Instagram posts/reels, v5 attempts Meta's tokenless Instagram oEmbed endpoint. Current web sources report that tokenless public oEmbed is available from 15 June 2026 and can return embed metadata including thumbnail information. citeturn276371search0turn276371search4
 
-## Android test
-1. Serve this folder from HTTPS.
-2. Open it in Chrome on Android.
-3. In Chrome menu, use the install/add-to-home-screen option. A real installed PWA should open standalone; a browser shortcut is not enough for share-target registration.
-4. After installation, open Instagram and use Share. InstaSaves should be available as a share target when Chrome/Android exposes web share targets.
+Important: this client does not upload or store your saved library on GitHub. The thumbnail/metadata request, when it succeeds, is a direct network request at save time; the resulting record is then stored in the phone's IndexedDB. If the browser blocks the request or the post is unsupported/private, the URL/shared text is still saved locally.
 
-## Important
-The MVP stores only the Instagram URL and locally editable metadata. It does not download Instagram videos or fetch remote thumbnails yet.
+The app also provides JSON Export/Import for backups.
