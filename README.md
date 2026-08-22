@@ -11,4 +11,4 @@ This is the v3-style version with automatic Android share saving preserved, plus
 
 The browser may block the metadata or image request because cross-origin access and Instagram/Meta policies can change. The automatic save itself does not depend on metadata succeeding.
 
-MDN documents GET share targets for receiving title/text/URL, and notes that installed PWAs are required to appear in the system share dialog. citeturn155523search0turn155523search2
+MDN documents GET share targets for receiving title/text/URL, and notes that installed PWAs are required to appear in the system share dialog. 
