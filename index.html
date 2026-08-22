@@ -47,18 +47,77 @@ function del(id){return new Promise((res,rej)=>{const r=store('readwrite').delet
 function clearAll(){return new Promise((res,rej)=>{const r=store('readwrite').clear();r.onsuccess=()=>res();r.onerror=()=>rej(r.error)})}
 function validUrl(s){try{const u=new URL(s.trim()); if(!/^www\.instagram\.com$|^instagram\.com$|^[a-z]+\.instagram\.com$/i.test(u.hostname))return null; u.hash=''; return u.toString()}catch{return null}}
 function tagsFromUrl(url){const p=url.toLowerCase(),a=[];if(p.includes('/reel/'))a.push('reel');else if(p.includes('/p/'))a.push('post');else if(p.includes('/tv/'))a.push('video');return a}
+function topicTags(text){const s=(text||'').toLowerCase(),t=[];if(/\b(ai|python|coding|developer|programming|software|tech|gadget|tool)\b/.test(s))t.push('tech');if(/\b(nature|travel|mountain|forest|wildlife|hike|hiking)\b/.test(s))t.push('nature');return t}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function placeholder(){return '<div class="thumb placeholder">Instagram save</div>'}
 async function render(){let items=await getAll();items.sort((a,b)=>b.createdAt-a.createdAt);const q=$('search').value.trim().toLowerCase();if(q)items=items.filter(x=>[x.url,x.title,x.caption,x.notes,...(x.tags||[])].join(' ').toLowerCase().includes(q));if(!items.length){$('grid').innerHTML='<div class="empty">'+(q?'No saves match your search.':'No saves yet. Share an Instagram post to InstaSaves or paste a link above.')+'</div>';return}$('grid').innerHTML=items.map(x=>`<article class="card">${x.thumbnail?`<img class="thumb" src="${esc(x.thumbnail)}" alt="" loading="lazy">`:placeholder()}<div class="body"><div class="title">${esc(x.title||'Instagram save')}</div><div class="url">${esc(x.url)}</div>${x.caption?`<div class="notes">${esc(x.caption)}</div>`:''}<div class="tags">${(x.tags||[]).map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div>${x.notes?`<div class="notes">${esc(x.notes)}</div>`:''}<div class="actions"><a class="ghost" href="${esc(x.url)}" target="_blank" rel="noopener">Open</a><button class="ghost" onclick="window.editSave(${x.id})">Edit</button><button class="danger" onclick="window.deleteSave(${x.id})">Delete</button></div></div></article>`).join('')}
 window.deleteSave=async id=>{if(!confirm('Delete this save?'))return;await del(id);await render()};
 window.editSave=async id=>{const x=(await getAll()).find(v=>v.id===id);if(!x)return;editId=id;$('editTitle').value=x.title||'';$('editTags').value=(x.tags||[]).join(', ');$('editNotes').value=x.notes||'';$('editDialog').showModal()};
-async function saveUrl(raw){const url=validUrl(raw);if(!url)return false;const items=await getAll();if(items.some(x=>x.url===url))return true;await add({url,title:'Instagram save',caption:'',thumbnail:'',tags:tagsFromUrl(url),notes:'',createdAt:Date.now()});return true}
+
+// -- metadata fetching (added) --------------------------------------------
+async function fetchMeta(url){
+  try{
+    const endpoint='https://graph.facebook.com/v25.0/instagram_oembed?url='+encodeURIComponent(url);
+    const r=await fetch(endpoint,{credentials:'omit'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const d=await r.json();
+    return {title:d.title||'',author:d.author_name||'',thumbnailUrl:d.thumbnail_url||''};
+  }catch{return null}
+}
+async function cacheImage(url){
+  if(!url)return '';
+  try{
+    const r=await fetch(url,{credentials:'omit'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const b=await r.blob();
+    if(!b.type.startsWith('image/'))return '';
+    return await new Promise(resolve=>{const rd=new FileReader();rd.onload=()=>resolve(rd.result);rd.onerror=()=>resolve('');rd.readAsDataURL(b)});
+  }catch{return ''}
+}
+// ---------------------------------------------------------------------------
+
+async function saveUrl(raw,title='',caption=''){
+  const url=validUrl(raw);if(!url)return false;
+  const items=await getAll();if(items.some(x=>x.url===url))return true;
+  const tags=[...new Set([...tagsFromUrl(url),...topicTags(caption)])];
+  const record={url,title:(title||'').trim()||'Instagram save',caption:(caption||'').trim(),thumbnail:'',tags,notes:'',createdAt:Date.now()};
+  // Save immediately so the share is never lost, then enrich once metadata comes back.
+  const id=await add(record);record.id=id;await render();
+  const meta=await fetchMeta(url);
+  if(meta){
+    if(record.title==='Instagram save'&&meta.title)record.title=meta.title;
+    if(!record.caption&&meta.title)record.caption=meta.title;
+    const img=await cacheImage(meta.thumbnailUrl);
+    record.thumbnail=img||meta.thumbnailUrl||'';
+    record.tags=[...new Set([...record.tags,...topicTags(record.caption)])];
+    await put(record);await render();
+  }
+  return true;
+}
 $('saveBtn').onclick=async()=>{if(!(await saveUrl($('urlInput').value)))return alert('Paste a valid Instagram URL.');$('urlInput').value='';await render()};$('search').oninput=render;$('cancelEdit').onclick=()=>$('editDialog').close();
 $('editForm').onsubmit=async e=>{e.preventDefault();const x=(await getAll()).find(v=>v.id===editId);if(!x)return;x.title=$('editTitle').value.trim()||'Instagram save';x.tags=$('editTags').value.split(',').map(s=>s.trim()).filter(Boolean);x.notes=$('editNotes').value.trim();await put(x);$('editDialog').close();await render()};
 $('exportBtn').onclick=async()=>{const blob=new Blob([JSON.stringify({format:'instasaves-v3',exportedAt:new Date().toISOString(),saves:await getAll()},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='instasaves-backup.json';a.click();URL.revokeObjectURL(a.href)};
 $('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files?.[0];if(!f)return;try{const d=JSON.parse(await f.text());for(const x of (d.saves||[])){if(validUrl(x.url))await saveUrl(x.url).then(async()=>{const items=await getAll();const y=items.find(v=>v.url===validUrl(x.url));if(y){y.title=x.title||y.title;y.caption=x.caption||'';y.thumbnail=x.thumbnail||'';y.tags=x.tags||[];y.notes=x.notes||'';await put(y)}})}await render();alert('Import complete.')}catch{alert('That backup is invalid.')}};
 $('clearBtn').onclick=async()=>{if(confirm('Delete every local save from this device?')){await clearAll();await render()}};
-async function handleShareUrl(){const qs=new URLSearchParams(location.search);const shared=qs.get('url')||qs.get('shared_url')||qs.get('text');if(shared){const u=validUrl(shared)||((shared.match(/https?:\/\/[^\s]+/i)||[])[0]&&validUrl((shared.match(/https?:\/\/[^\s]+/i)||[])[0]));if(u){await saveUrl(u);$('status').textContent='Saved from Android share';await render()}history.replaceState({},'',location.pathname)}}
+
+// -- share target: manifest action is "./" with GET params (title/text/url) --
+async function handleShareUrl(){
+  const qs=new URLSearchParams(location.search);
+  const sharedUrl=qs.get('url')||qs.get('shared_url')||'';
+  const sharedText=qs.get('text')||'';
+  const sharedTitle=qs.get('title')||'';
+  const candidate=sharedUrl||sharedText;
+  if(candidate){
+    const u=validUrl(candidate)||((candidate.match(/https?:\/\/[^\s]+/i)||[])[0]&&validUrl((candidate.match(/https?:\/\/[^\s]+/i)||[])[0]));
+    if(u){
+      const captionGuess=sharedText.replace(/https?:\/\/\S+/g,'').trim();
+      await saveUrl(u,sharedTitle,captionGuess);
+      $('status').textContent='Saved from Android share';
+      await render();
+    }
+    history.replaceState({},'',location.pathname);
+  }
+}
 async function init(){db=await openDB();if('serviceWorker'in navigator){try{await navigator.serviceWorker.register('./sw.js',{scope:'./'})}catch{}}$('status').textContent=navigator.onLine?'Local-only library':'Local-only · offline';await handleShareUrl();await render()}
 init();
 </script>
