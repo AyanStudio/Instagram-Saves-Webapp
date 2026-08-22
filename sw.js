@@ -1,4 +1,4 @@
-const VERSION='v6.1'; // bump this string on every future deploy
+const VERSION='v3'; // bump this string on every future deploy
 const CACHE=`instasaves-${VERSION}-shell`;
 const ASSETS=['./','./index.html','./manifest.webmanifest','./sw.js','./icons/icon-192.png','./icons/icon-512.png'];
 
